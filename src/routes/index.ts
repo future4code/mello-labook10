@@ -1,9 +1,10 @@
 import { Router } from 'express';
+import userRouter from './';
+import singinRouter from './';
 
 const routes = Router();
 
-routes.get('/', (request, response) =>
-  response.json({ message: 'ola mundo!' }),
-);
+routes.use('/', userRouter);
+routes.use('/', singinRouter);
 
 export default routes;
