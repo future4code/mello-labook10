@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
-import { Authenticator } from "../services/Authenticator";
-import { BaseDatabase } from "../data/BaseDatabase";
-import { UserBusiness } from "../business/UserBusiness";
+import { BaseDatabase } from "../utils/BaseDataBase";
+import  {UserBusiness}  from "../utils/UserBusiness";
 
 export const signUp = async (req: Request, res: Response) => {
   try {
@@ -11,7 +10,8 @@ export const signUp = async (req: Request, res: Response) => {
     const password = req.body.password;
 
     const userBusiness = new UserBusiness();
-    const token = await userBusiness.signUp(name, email, password);
+    const token = await 
+    userBusiness.signUp(name, email, password);
 
     res.status(200).send({
       message: 'Usuário criado com sucesso',
