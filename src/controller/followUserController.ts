@@ -1,22 +1,22 @@
-import { Request, Response } from "express";
-import { Authenticator } from "../services/Authenticator";
-import { BaseDatabase } from "../data/BaseDatabase";
-import { FollowDatabase } from "../data/FollowDatabase";
+import { Request, Response } from 'express';
+import { Follower } from '../models/followUsers';
+import Authenticator from '../utils/Authenticator';
 
-export const followUser = async (req: Request, res: Response) => {
+ class FollowUserController{ 
+        async follow(req: Request, res: Response) {
     try {
         const token = req.headers.authorization as string;
 
         const userIdToFollow = req.body.userIdToFollow;
 
-        if (!userIdToFollow || userIdToFollow === "") {
+        if (!userIdToFollow || userIdToFollow === '') {
             throw new Error("Incorrect id!")
         }
 
         const authenticator = new Authenticator();
-        const authenticationData = authenticator.getData(token)
+        const authenticationData = authenticator.getTokenData(token)
 
-        const followDatabase = new FollowDatabase();
+        const followDatabase = new Follower();
         await followDatabase.followUser(authenticationData.id, userIdToFollow)
 
         res
@@ -30,7 +30,7 @@ export const followUser = async (req: Request, res: Response) => {
             .send({
                 message: error.sqlMessage || error.message
             })
-    } finally {
-        await BaseDatabase.destroyConnection();
-    }
+        }
 }
+}
+export default FollowUserController;
