@@ -2,35 +2,34 @@ import { Request, Response } from 'express';
 import { Follower } from '../models/followUsers';
 import Authenticator from '../utils/Authenticator';
 
- class FollowUserController{ 
-        async follow(req: Request, res: Response) {
+
+export const unfollowUser = async (req: Request, res: Response) => {
     try {
         const token = req.headers.authorization as string;
 
-        const userIdToFollow = req.body.userIdToFollow;
+        const userIdToUnfollow = req.body.userIdToUnfollow;
 
-        if (!userIdToFollow || userIdToFollow === '') {
+        if (!userIdToUnfollow || userIdToUnfollow === "") {
             throw new Error("Incorrect id!")
         }
 
         const authenticator = new Authenticator();
-        const authenticationData = authenticator.getTokenData(token)
+        const authenticationData = authenticator.getTokenData(token);
 
         const followDatabase = new Follower();
-        await followDatabase.followUser(authenticationData.id, userIdToFollow)
+        await followDatabase.unfollowUser(authenticationData.id, userIdToUnfollow)
 
         res
-            .status(200)
-            .send({
-                message: "Congratulations! Now, you are following your friend."
-            })
+        .status(200)
+        .send({
+            message: "Unfollowing friend."
+        })
     } catch(error) {
         res
             .status(400)
             .send({
                 message: error.sqlMessage || error.message
             })
-        }
+    } 
 }
-}
-export default FollowUserController;
+//comentário para teste de envio (podem apagar)
